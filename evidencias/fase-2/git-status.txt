@@ -1,0 +1,9 @@
+﻿
+> git status --short
+ M evidencias/fase-0/herramientas.txt
+ M evidencias/fase-0/imagenes.txt
+ M evidencias/fase-1/clickops.txt
+ M evidencias/fase-2/ciclo.txt
+?? evidencias/fase-2/git-status.txt
+?? scripts/fase3.ps1
+?? scripts/fase4.ps1

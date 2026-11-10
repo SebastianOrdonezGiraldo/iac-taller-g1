@@ -1,9 +1,9 @@
-output "url" {
-  value = "http://localhost:${var.puerto}"
-}
-
-output "contenedor" {
-  value = docker_container.web.name
+output "urls" {
+  value = [
+    module.tienda.url,
+    module.blog.url,
+    module.docs.url,
+  ]
 }
 
 output "red_driver" {

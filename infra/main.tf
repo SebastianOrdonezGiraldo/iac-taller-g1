@@ -13,30 +13,26 @@ provider "docker" {
   host = "npipe:////.//pipe//docker_engine"
 }
 
-resource "docker_image" "nginx" {
-  name         = var.imagen
-  keep_locally = true
+module "tienda" {
+  source  = "./modules/sitio_web"
+  nombre  = "tienda-g${var.grupo}"
+  puerto  = 8081
+  mensaje = "Tienda del grupo ${var.grupo}"
+  imagen  = var.imagen
 }
 
-resource "docker_container" "web" {
-  name  = local.nombre
-  image = docker_image.nginx.image_id
+module "blog" {
+  source  = "./modules/sitio_web"
+  nombre  = "blog-g${var.grupo}"
+  puerto  = 8082
+  mensaje = "Blog del grupo ${var.grupo}"
+  imagen  = var.imagen
+}
 
-  ports {
-    internal = 80
-    external = var.puerto
-  }
-
-  upload {
-    content = local.html
-    file    = "/usr/share/nginx/html/index.html"
-  }
-
-  dynamic "labels" {
-    for_each = local.etiquetas
-    content {
-      label = labels.key
-      value = labels.value
-    }
-  }
+module "docs" {
+  source  = "./modules/sitio_web"
+  nombre  = "docs-g${var.grupo}"
+  puerto  = 8083
+  mensaje = "Documentación del grupo ${var.grupo}"
+  imagen  = var.imagen
 }

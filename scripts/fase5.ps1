@@ -12,7 +12,7 @@ function Gate() {
   Write-Host "`nREVISOR/A DEL PLAN: lean la linea 'Plan:' de arriba." -ForegroundColor Yellow
   $ok = Read-Host "Escriban 'aprobado' para aplicar (cualquier otra cosa cancela)"
   Log "`nRevision del plan: $ok"
-  if ($ok -ne "aprobado") { Write-Host "Cancelado." -ForegroundColor Red; exit 1 }
+  if ($ok -notmatch "^aprobad[oa]$") { Write-Host "Cancelado." -ForegroundColor Red; exit 1 }
 }
 function Page($url) {
   Log "`n> GET $url"

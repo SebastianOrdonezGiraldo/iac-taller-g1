@@ -1,0 +1,91 @@
+﻿=== Parte A, paso 1: backend PostgreSQL (fuera de Terraform) ===
+
+> docker run -d --name tf-state-g1 -e POSTGRES_USER=terraform -e POSTGRES_PASSWORD=******** -e POSTGRES_DB=terraform_backend -p 5433:5432 postgres:17-alpine
+15b78a8a3dcc0a3a74b8583a70da171cc2d67e0b558818f410ab71c71463406e
+
+> docker exec tf-state-g1 pg_isready -U terraform -d terraform_backend
+/var/run/postgresql:5432 - accepting connections
+
+=== Paso 2: conexion en variable de entorno (solo en esta terminal) ===
+$env:PG_CONN_STR = "postgres://terraform:********@localhost:5433/terraform_backend?sslmode=disable"
+
+=== Paso 3: backend pg vacio en main.tf ===
+
+> Select-String -Path main.tf -Pattern 'backend'
+C:\Users\sebas\Desktop\iac-taller-g1\infra\main.tf:12:  backend "pg" {}
+
+=== Paso 4: migrar el state (-force-copy responde yes) ===
+
+> terraform init -no-color -migrate-state -force-copy
+Initializing the backend...
+
+Successfully configured the backend "pg"! Terraform will automatically
+use this backend unless the backend configuration changes.
+
+Initializing modules...
+
+Initializing provider plugins...
+- Reusing version 4.6.0 of kreuzwerker/docker from the dependency lock file
+- Using previously-installed kreuzwerker/docker v4.6.0
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+
+> terraform state list
+data.docker_network.bridge
+module.blog.docker_container.this
+module.blog.docker_image.this
+module.docs.docker_container.this
+module.docs.docker_image.this
+module.tienda.docker_container.this
+module.tienda.docker_image.this
+
+> docker exec tf-state-g1 psql -U terraform -d terraform_backend -c "SELECT id, name FROM terraform_remote_state.states;"
+ id |  name   
+----+---------
+  1 | default
+(1 row)
+
+
+=== Paso 5: prueba de bloqueo con dos terminales ===
+Terminal 1: terraform apply -replace=module.tienda.docker_container.this (queda esperando confirmacion)
+
+Terminal 2:
+
+> terraform plan -no-color -lock-timeout=0s
+data.docker_network.bridge: Reading...
+module.docs.docker_image.this: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+module.tienda.docker_image.this: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+module.blog.docker_image.this: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+data.docker_network.bridge: Read complete after 0s [id=6d895917a68c9828fda496f5f5b10d60c4486227bc220ba406ad452fa7aae255]
+module.tienda.docker_container.this: Refreshing state... [id=a203a06438666b9a79fa189b3646abeacf7b9787af60c7c44aa72ae423c0f707]
+module.blog.docker_container.this: Refreshing state... [id=79a601505cc3f23fbf45c2fb714e44e7be5dd6166f3ae89998d710feac62f473]
+module.docs.docker_container.this: Refreshing state... [id=e9064921f177c7e2c9b7b044b0a6d9fca1999051fb5259b19e5a3ed130ef8604]
+
+No changes. Your infrastructure matches the configuration.
+
+Terraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.
+Terminal 1 respondio 'no': Apply cancelled.
+
+> terraform plan -no-color
+data.docker_network.bridge: Reading...
+module.docs.docker_image.this: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+module.blog.docker_image.this: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+module.tienda.docker_image.this: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+data.docker_network.bridge: Read complete after 0s [id=6d895917a68c9828fda496f5f5b10d60c4486227bc220ba406ad452fa7aae255]
+module.docs.docker_container.this: Refreshing state... [id=e9064921f177c7e2c9b7b044b0a6d9fca1999051fb5259b19e5a3ed130ef8604]
+module.blog.docker_container.this: Refreshing state... [id=79a601505cc3f23fbf45c2fb714e44e7be5dd6166f3ae89998d710feac62f473]
+module.tienda.docker_container.this: Refreshing state... [id=a203a06438666b9a79fa189b3646abeacf7b9787af60c7c44aa72ae423c0f707]
+
+No changes. Your infrastructure matches the configuration.
+
+Terraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.

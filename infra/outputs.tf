@@ -1,9 +1,5 @@
 output "urls" {
-  value = [
-    module.tienda.url,
-    module.blog.url,
-    module.docs.url,
-  ]
+  value = { for k, m in module.sitio : m.nombre => m.url }
 }
 
 output "red_driver" {

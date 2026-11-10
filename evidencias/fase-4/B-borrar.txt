@@ -1,0 +1,180 @@
+﻿=== Experimento B: borrar el servidor ===
+
+> docker rm -f web-g1
+web-g1
+
+--- plan -refresh-only ---
+
+> terraform plan -no-color -refresh-only
+docker_image.nginx: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+docker_container.web: Refreshing state... [id=1ff894bb7c805b6a9d8190473dc3f0c1757fe7847acd94563b353b8060f0fbb5]
+
+Note: Objects have changed outside of Terraform
+
+Terraform detected the following changes made outside of Terraform since the
+last "terraform apply" which may have affected this plan:
+
+  # docker_container.web has been deleted
+  - resource "docker_container" "web" {
+      - attach                                      = false -> null
+      - command                                     = [
+          - "nginx",
+          - "-g",
+          - "daemon off;",
+        ] -> null
+      - container_read_refresh_timeout_milliseconds = 15000 -> null
+      - cpu_shares                                  = 0 -> null
+      - entrypoint                                  = [
+          - "/docker-entrypoint.sh",
+        ] -> null
+      - env                                         = [] -> null
+      - hostname                                    = "1ff894bb7c80" -> null
+      - id                                          = "1ff894bb7c805b6a9d8190473dc3f0c1757fe7847acd94563b353b8060f0fbb5" -> null
+      - image                                       = "sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236" -> null
+      - init                                        = false -> null
+      - ipc_mode                                    = "private" -> null
+      - log_driver                                  = "local" -> null
+      - logs                                        = false -> null
+      - max_retry_count                             = 0 -> null
+      - memory                                      = 0 -> null
+      - memory_reservation                          = 0 -> null
+      - memory_swap                                 = 0 -> null
+      - must_run                                    = true -> null
+      - name                                        = "web-g1" -> null
+      - network_data                                = [
+          - {
+              - gateway                   = "172.17.0.1"
+              - global_ipv6_prefix_length = 0
+              - ip_address                = "172.17.0.2"
+              - ip_prefix_length          = 16
+              - mac_address               = "06:20:42:c5:db:d4"
+              - network_name              = "bridge"
+                # (2 unchanged attributes hidden)
+            },
+        ] -> null
+      - network_mode                                = "bridge" -> null
+      - platform                                    = "linux" -> null
+      - privileged                                  = false -> null
+      - publish_all_ports                           = false -> null
+      - read_only                                   = false -> null
+      - remove_volumes                              = true -> null
+      - restart                                     = "no" -> null
+      - rm                                          = false -> null
+      - runtime                                     = "runc" -> null
+      - security_opts                               = [] -> null
+      - shm_size                                    = 64 -> null
+      - start                                       = true -> null
+      - stdin_open                                  = false -> null
+      - stop_signal                                 = "SIGQUIT" -> null
+      - stop_timeout                                = 0 -> null
+      - tty                                         = false -> null
+      - wait                                        = false -> null
+      - wait_timeout                                = 60 -> null
+      - working_dir                                 = "/" -> null
+        # (5 unchanged attributes hidden)
+
+      - ports {
+          - external = 8080 -> null
+          - internal = 80 -> null
+          - ip       = "0.0.0.0" -> null
+          - protocol = "tcp" -> null
+        }
+    }
+
+
+This is a refresh-only plan, so Terraform will not take any actions to undo
+these. If you were expecting these changes then you can apply this plan to
+record the updated values in the Terraform state without changing any remote
+objects.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.
+
+--- plan normal ---
+
+> terraform plan -no-color -out fase4b.tfplan
+docker_image.nginx: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+docker_container.web: Refreshing state... [id=1ff894bb7c805b6a9d8190473dc3f0c1757fe7847acd94563b353b8060f0fbb5]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # docker_container.web will be created
+  + resource "docker_container" "web" {
+      + attach                                      = false
+      + bridge                                      = (known after apply)
+      + command                                     = (known after apply)
+      + container_logs                              = (known after apply)
+      + container_read_refresh_timeout_milliseconds = 15000
+      + entrypoint                                  = (known after apply)
+      + env                                         = (known after apply)
+      + exit_code                                   = (known after apply)
+      + hostname                                    = (known after apply)
+      + id                                          = (known after apply)
+      + image                                       = "sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236"
+      + init                                        = (known after apply)
+      + ipc_mode                                    = (known after apply)
+      + log_driver                                  = (known after apply)
+      + logs                                        = false
+      + memory_reservation                          = 0
+      + must_run                                    = true
+      + name                                        = "web-g1"
+      + network_data                                = (known after apply)
+      + network_mode                                = "bridge"
+      + platform                                    = (known after apply)
+      + read_only                                   = false
+      + remove_volumes                              = true
+      + restart                                     = "no"
+      + rm                                          = false
+      + runtime                                     = (known after apply)
+      + security_opts                               = (known after apply)
+      + shm_size                                    = (known after apply)
+      + start                                       = true
+      + stdin_open                                  = false
+      + stop_signal                                 = (known after apply)
+      + stop_timeout                                = (known after apply)
+      + tty                                         = false
+      + wait                                        = false
+      + wait_timeout                                = 60
+
+      + healthcheck (known after apply)
+
+      + labels (known after apply)
+
+      + ports {
+          + external = 8080
+          + internal = 80
+          + ip       = "0.0.0.0"
+          + protocol = "tcp"
+        }
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: fase4b.tfplan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "fase4b.tfplan"
+
+Revision del plan: aprobado
+
+> terraform apply -no-color fase4b.tfplan
+docker_container.web: Creating...
+docker_container.web: Creation complete after 1s [id=84106e14fbd4fcf8727c2a84aa7e0544db7dc208f0b402d2fc8305ed31547dd9]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+url = "http://localhost:8080"
+
+> GET http://localhost:8080
+<title>Welcome to nginx!</title>
+<h1>Welcome to nginx!</h1>

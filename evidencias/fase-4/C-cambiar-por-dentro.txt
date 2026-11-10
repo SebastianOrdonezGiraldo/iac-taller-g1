@@ -1,0 +1,55 @@
+﻿=== Experimento C: cambiar el contenido por dentro ===
+
+> docker exec web-g1 sh -c "echo '<h1>Cambio manual</h1>' > /usr/share/nginx/html/index.html"
+
+> GET http://localhost:8080
+<h1>Cambio manual</h1>
+
+--- plan despues del cambio manual ---
+
+> terraform plan -no-color
+docker_image.nginx: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+docker_container.web: Refreshing state... [id=84106e14fbd4fcf8727c2a84aa7e0544db7dc208f0b402d2fc8305ed31547dd9]
+
+No changes. Your infrastructure matches the configuration.
+
+Terraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.
+
+--- correccion inmutable: -replace ---
+
+> terraform plan -no-color -replace=docker_container.web -out fase4c.tfplan
+System.Management.Automation.RemoteException
+Error: Too many command line arguments
+System.Management.Automation.RemoteException
+To specify a working directory for the plan, use the global -chdir flag.
+System.Management.Automation.RemoteException
+Error: Invalid force-replace address "docker_container"
+System.Management.Automation.RemoteException
+Resource specification must include a resource type and name.
+System.Management.Automation.RemoteException
+For more help on using this command, run:
+  terraform plan -help
+
+Revision del plan: aprobado
+
+> terraform apply -no-color fase4c.tfplan
+System.Management.Automation.RemoteException
+Error: Failed to load "fase4c.tfplan" as a plan file
+System.Management.Automation.RemoteException
+Error: GetFileAttributesEx fase4c.tfplan: The system cannot find the file
+specified.
+
+> GET http://localhost:8080
+<h1>Cambio manual</h1>
+
+--- verificacion final ---
+
+> terraform plan -no-color
+docker_image.nginx: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+docker_container.web: Refreshing state... [id=84106e14fbd4fcf8727c2a84aa7e0544db7dc208f0b402d2fc8305ed31547dd9]
+
+No changes. Your infrastructure matches the configuration.
+
+Terraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.

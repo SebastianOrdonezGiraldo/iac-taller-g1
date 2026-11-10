@@ -53,3 +53,118 @@ No changes. Your infrastructure matches the configuration.
 
 Terraform has compared your real infrastructure against your configuration
 and found no differences, so no changes are needed.
+
+=== Reintento de la correccion inmutable (el argumento -replace necesitaba comillas en PowerShell) ===
+
+> GET http://localhost:8080
+<h1>Cambio manual</h1>
+
+> terraform plan -no-color "-replace=docker_container.web" -out fase4c.tfplan
+docker_image.nginx: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+docker_container.web: Refreshing state... [id=84106e14fbd4fcf8727c2a84aa7e0544db7dc208f0b402d2fc8305ed31547dd9]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+-/+ destroy and then create replacement
+
+Terraform will perform the following actions:
+
+  # docker_container.web will be replaced, as requested
+-/+ resource "docker_container" "web" {
+      + bridge                                      = (known after apply)
+      ~ command                                     = [
+          - "nginx",
+          - "-g",
+          - "daemon off;",
+        ] -> (known after apply)
+      + container_logs                              = (known after apply)
+      - cpu_shares                                  = 0 -> null
+      - device_cgroup_rules                         = [] -> null
+      - dns                                         = [] -> null
+      - dns_opts                                    = [] -> null
+      - dns_search                                  = [] -> null
+      ~ entrypoint                                  = [
+          - "/docker-entrypoint.sh",
+        ] -> (known after apply)
+      ~ env                                         = [] -> (known after apply)
+      + exit_code                                   = (known after apply)
+      - group_add                                   = [] -> null
+      ~ hostname                                    = "84106e14fbd4" -> (known after apply)
+      ~ id                                          = "84106e14fbd4fcf8727c2a84aa7e0544db7dc208f0b402d2fc8305ed31547dd9" -> (known after apply)
+      ~ init                                        = false -> (known after apply)
+      ~ ipc_mode                                    = "private" -> (known after apply)
+      ~ log_driver                                  = "local" -> (known after apply)
+      - log_opts                                    = {} -> null
+      - max_retry_count                             = 0 -> null
+      - memory                                      = 0 -> null
+      - memory_swap                                 = 0 -> null
+        name                                        = "web-g1"
+      ~ network_data                                = [
+          - {
+              - gateway                   = "172.17.0.1"
+              - global_ipv6_prefix_length = 0
+              - ip_address                = "172.17.0.2"
+              - ip_prefix_length          = 16
+              - mac_address               = "ee:72:b5:95:83:9d"
+              - network_name              = "bridge"
+                # (2 unchanged attributes hidden)
+            },
+        ] -> (known after apply)
+      ~ platform                                    = "linux" -> (known after apply)
+      - privileged                                  = false -> null
+      - publish_all_ports                           = false -> null
+      ~ runtime                                     = "runc" -> (known after apply)
+      ~ security_opts                               = [] -> (known after apply)
+      ~ shm_size                                    = 64 -> (known after apply)
+      ~ stop_signal                                 = "SIGQUIT" -> (known after apply)
+      ~ stop_timeout                                = 0 -> (known after apply)
+      - storage_opts                                = {} -> null
+      - sysctls                                     = {} -> null
+      - tmpfs                                       = {} -> null
+      - working_dir                                 = "/" -> null
+        # (20 unchanged attributes hidden)
+
+      ~ healthcheck (known after apply)
+
+      ~ labels (known after apply)
+
+        # (1 unchanged block hidden)
+    }
+
+Plan: 1 to add, 0 to change, 1 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: fase4c.tfplan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "fase4c.tfplan"
+
+Revision del plan: aprobado
+
+> terraform apply -no-color fase4c.tfplan
+docker_container.web: Destroying... [id=84106e14fbd4fcf8727c2a84aa7e0544db7dc208f0b402d2fc8305ed31547dd9]
+docker_container.web: Destruction complete after 1s
+docker_container.web: Creating...
+docker_container.web: Creation complete after 0s [id=c2cb4a45793aa9710f0c3ffb2949770e782afa6d665210638ecbda5de3bca924]
+
+Apply complete! Resources: 1 added, 0 changed, 1 destroyed.
+
+Outputs:
+
+url = "http://localhost:8080"
+
+> GET http://localhost:8080
+<title>Welcome to nginx!</title>
+<h1>Welcome to nginx!</h1>
+
+--- verificacion final ---
+
+> terraform plan -no-color
+docker_image.nginx: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+docker_container.web: Refreshing state... [id=c2cb4a45793aa9710f0c3ffb2949770e782afa6d665210638ecbda5de3bca924]
+
+No changes. Your infrastructure matches the configuration.
+
+Terraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.

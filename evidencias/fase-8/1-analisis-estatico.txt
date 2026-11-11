@@ -1,0 +1,9 @@
+﻿
+> terraform workspace show
+dev
+
+> terraform fmt -check -recursive
+
+> terraform validate -no-color
+Success! The configuration is valid.
+

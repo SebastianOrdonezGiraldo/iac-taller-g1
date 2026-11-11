@@ -1,4 +1,4 @@
-output "urls" {
+﻿output "urls" {
   value = { for k, m in module.sitio : m.nombre => m.url }
 }
 

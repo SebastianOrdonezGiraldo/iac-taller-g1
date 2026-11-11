@@ -1,0 +1,104 @@
+﻿=== Escaneo con el bucket publico (cuatro valores en false) ===
+
+> python -m checkov.main -d seguridad --compact --quiet
+terraform scan results:
+
+Passed checks: 4, Failed checks: 11, Skipped checks: 0
+
+Check: CKV_AWS_53: "Ensure S3 bucket has block public ACLS enabled"
+	FAILED for resource: aws_s3_bucket_public_access_block.evidencias
+	File: \bucket.tf:5-11
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/bc-aws-s3-19
+[0mCheck: CKV_AWS_54: "Ensure S3 bucket has block public policy enabled"
+	FAILED for resource: aws_s3_bucket_public_access_block.evidencias
+	File: \bucket.tf:5-11
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/bc-aws-s3-20
+[0mCheck: CKV_AWS_55: "Ensure S3 bucket has ignore public ACLs enabled"
+	FAILED for resource: aws_s3_bucket_public_access_block.evidencias
+	File: \bucket.tf:5-11
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/bc-aws-s3-21
+[0mCheck: CKV_AWS_56: "Ensure S3 bucket has 'restrict_public_buckets' enabled"
+	FAILED for resource: aws_s3_bucket_public_access_block.evidencias
+	File: \bucket.tf:5-11
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/bc-aws-s3-22
+[0mCheck: CKV2_AWS_62: "Ensure S3 buckets should have event notifications enabled"
+	FAILED for resource: aws_s3_bucket.evidencias
+	File: \bucket.tf:1-3
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-logging-policies/bc-aws-2-62
+[0mCheck: CKV_AWS_21: "Ensure all data stored in the S3 bucket have versioning enabled"
+	FAILED for resource: aws_s3_bucket.evidencias
+	File: \bucket.tf:1-3
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/s3-16-enable-versioning
+[0mCheck: CKV2_AWS_61: "Ensure that an S3 bucket has a lifecycle configuration"
+	FAILED for resource: aws_s3_bucket.evidencias
+	File: \bucket.tf:1-3
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-logging-policies/bc-aws-2-61
+[0mCheck: CKV_AWS_18: "Ensure the S3 bucket has access logging enabled"
+	FAILED for resource: aws_s3_bucket.evidencias
+	File: \bucket.tf:1-3
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/s3-13-enable-logging
+[0mCheck: CKV_AWS_144: "Ensure that S3 bucket has cross-region replication enabled"
+	FAILED for resource: aws_s3_bucket.evidencias
+	File: \bucket.tf:1-3
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-s3-bucket-has-cross-region-replication-enabled
+[0mCheck: CKV2_AWS_6: "Ensure that S3 bucket has a Public Access block"
+	FAILED for resource: aws_s3_bucket.evidencias
+	File: \bucket.tf:1-3
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/s3-bucket-should-have-public-access-blocks-defaults-to-false-if-the-public-access-block-is-not-attached
+[0mCheck: CKV_AWS_145: "Ensure that S3 buckets are encrypted with KMS by default"
+	FAILED for resource: aws_s3_bucket.evidencias
+	File: \bucket.tf:1-3
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-s3-buckets-are-encrypted-with-kms-by-default
+[0m
+
+=== Correccion: los cuatro valores a true ===
+
+> Get-Content seguridad\bucket.tf
+resource "aws_s3_bucket" "evidencias" {
+  bucket = "evidencias-grupo-1"
+}
+
+resource "aws_s3_bucket_public_access_block" "evidencias" {
+  bucket                  = aws_s3_bucket.evidencias.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+=== Escaneo despues de corregir ===
+
+> python -m checkov.main -d seguridad --compact --quiet
+terraform scan results:
+
+Passed checks: 9, Failed checks: 6, Skipped checks: 0
+
+Check: CKV2_AWS_62: "Ensure S3 buckets should have event notifications enabled"
+	FAILED for resource: aws_s3_bucket.evidencias
+	File: \bucket.tf:1-3
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-logging-policies/bc-aws-2-62
+[0mCheck: CKV2_AWS_61: "Ensure that an S3 bucket has a lifecycle configuration"
+	FAILED for resource: aws_s3_bucket.evidencias
+	File: \bucket.tf:1-3
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-logging-policies/bc-aws-2-61
+[0mCheck: CKV_AWS_18: "Ensure the S3 bucket has access logging enabled"
+	FAILED for resource: aws_s3_bucket.evidencias
+	File: \bucket.tf:1-3
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/s3-13-enable-logging
+[0mCheck: CKV_AWS_144: "Ensure that S3 bucket has cross-region replication enabled"
+	FAILED for resource: aws_s3_bucket.evidencias
+	File: \bucket.tf:1-3
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-s3-bucket-has-cross-region-replication-enabled
+[0mCheck: CKV_AWS_145: "Ensure that S3 buckets are encrypted with KMS by default"
+	FAILED for resource: aws_s3_bucket.evidencias
+	File: \bucket.tf:1-3
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-s3-buckets-are-encrypted-with-kms-by-default
+[0mCheck: CKV_AWS_21: "Ensure all data stored in the S3 bucket have versioning enabled"
+	FAILED for resource: aws_s3_bucket.evidencias
+	File: \bucket.tf:1-3
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/s3-16-enable-versioning
+[0m
+
+=== Resumen antes / despues ===
+Passed checks: 4, Failed checks: 11, Skipped checks: 0
+Passed checks: 9, Failed checks: 6, Skipped checks: 0

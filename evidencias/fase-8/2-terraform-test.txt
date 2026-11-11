@@ -1,0 +1,39 @@
+﻿
+> terraform init -no-color
+Initializing the backend...
+
+Initializing provider plugins...
+- Finding latest version of kreuzwerker/docker...
+- Installing kreuzwerker/docker v4.7.0...
+- Installed kreuzwerker/docker v4.7.0 (self-signed, key ID 0DCE698927DAF8EC)
+Partner and community providers are signed by their developers.
+If you'd like to know more about provider signing, you can read about it here:
+https://developer.hashicorp.com/terraform/cli/plugins/signing
+
+Terraform has created a lock file .terraform.lock.hcl to record the provider
+selections it made above. Include this file in your version control repository
+so that Terraform can guarantee to make the same selections by default when
+you run "terraform init" in the future.
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+
+(en paralelo se observa docker ps cada segundo mientras corren las pruebas)
+
+> terraform test -no-color
+tests\sitio_web.tftest.hcl... in progress
+  run "url_coherente_con_puerto"... pass
+  run "rechaza_puerto_fuera_de_rango"... pass
+  run "despliegue_real"... pass
+  run "nombre_coincide_con_variable"... pass
+tests\sitio_web.tftest.hcl... tearing down
+tests\sitio_web.tftest.hcl... pass
+
+Success! 4 passed, 0 failed.

@@ -1,0 +1,6 @@
+﻿14:36:11  (sin contenedor prueba-g1)
+14:36:12  (sin contenedor prueba-g1)
+14:36:13  prueba-g1 Up Less than a second 0.0.0.0:8999->80/tcp
+14:36:15  (sin contenedor prueba-g1)
+14:36:16  (sin contenedor prueba-g1)
+14:36:17  (sin contenedor prueba-g1)

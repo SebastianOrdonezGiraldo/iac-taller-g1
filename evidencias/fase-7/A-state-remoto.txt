@@ -73,7 +73,7 @@ No changes. Your infrastructure matches the configuration.
 
 Terraform has compared your real infrastructure against your configuration
 and found no differences, so no changes are needed.
-Nota: en este primer intento la terminal 2 NO encontro el bloqueo (la terminal 1 todavia no tenia el apply esperando confirmacion). La prueba se repitio con verificacion en C-prueba-bloqueo.txt.
+Nota: en este primer intento la terminal 2 NO encontro el bloqueo (no se pudo confirmar en que estado estaba la terminal 1 en ese momento). La prueba se repitio con verificacion en C-prueba-bloqueo.txt.
 
 > terraform plan -no-color
 data.docker_network.bridge: Reading...

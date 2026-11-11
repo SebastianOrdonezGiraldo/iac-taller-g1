@@ -61,3 +61,105 @@ Codigo de salida: 3
 > bash validar.sh   (restaurado)
 outputs.tf
 Codigo de salida: 3
+
+=== Correccion: al restaurar infra/outputs.tf el script anterior le agrego un BOM (UTF-8), por eso fmt -check seguia fallando en las dos ultimas ejecuciones. Se quito el BOM y se repiten. ===
+
+=== Prueba: un valor del bucket de nuevo en false ===
+
+> bash validar.sh   (bucket publico)
+[32m[1mSuccess![0m The configuration is valid.
+[0m
+tests\sitio_web.tftest.hcl... [37min progress[0m
+[0m  run "url_coherente_con_puerto"... [32mpass[0m[0m
+  run "rechaza_puerto_fuera_de_rango"... [32mpass[0m[0m
+  run "despliegue_real"... [32mpass[0m[0m
+  run "nombre_coincide_con_variable"... [32mpass[0m[0m
+tests\sitio_web.tftest.hcl... [37mtearing down[0m
+[0mtests\sitio_web.tftest.hcl... [32mpass[0m[0m
+
+[32mSuccess![0m[0m 4 passed, 0 failed.
+
+       _               _
+   ___| |__   ___  ___| | _______   __
+  / __| '_ \ / _ \/ __| |/ / _ \ \ / /
+ | (__| | | |  __/ (__|   < (_) \ V /
+  \___|_| |_|\___|\___|_|\_\___/ \_/
+
+By Prisma Cloud | version: 3.4.4 
+
+terraform scan results:
+
+Passed checks: 3, Failed checks: 1, Skipped checks: 0
+
+Check: CKV_AWS_54: "Ensure S3 bucket has block public policy enabled"
+	PASSED for resource: aws_s3_bucket_public_access_block.evidencias
+	File: \bucket.tf:5-11
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/bc-aws-s3-20
+[0mCheck: CKV_AWS_55: "Ensure S3 bucket has ignore public ACLs enabled"
+	PASSED for resource: aws_s3_bucket_public_access_block.evidencias
+	File: \bucket.tf:5-11
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/bc-aws-s3-21
+[0mCheck: CKV_AWS_56: "Ensure S3 bucket has 'restrict_public_buckets' enabled"
+	PASSED for resource: aws_s3_bucket_public_access_block.evidencias
+	File: \bucket.tf:5-11
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/bc-aws-s3-22
+[0mCheck: CKV_AWS_53: "Ensure S3 bucket has block public ACLS enabled"
+	FAILED for resource: aws_s3_bucket_public_access_block.evidencias
+	File: \bucket.tf:5-11
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/bc-aws-s3-19
+[0m
+		[37m5  | [33mresource "aws_s3_bucket_public_access_block" "evidencias" {
+		[37m6  | [33m  bucket                  = aws_s3_bucket.evidencias.id
+		[37m7  | [33m  block_public_acls       = false
+		[37m8  | [33m  block_public_policy     = true
+		[37m9  | [33m  ignore_public_acls      = true
+		[37m10 | [33m  restrict_public_buckets = true
+		[37m11 | [33m}
+
+Codigo de salida: 1
+
+=== Ejecucion final con todo restaurado ===
+
+> bash validar.sh   (restaurado)
+[32m[1mSuccess![0m The configuration is valid.
+[0m
+tests\sitio_web.tftest.hcl... [37min progress[0m
+[0m  run "url_coherente_con_puerto"... [32mpass[0m[0m
+  run "rechaza_puerto_fuera_de_rango"... [32mpass[0m[0m
+  run "despliegue_real"... [32mpass[0m[0m
+  run "nombre_coincide_con_variable"... [32mpass[0m[0m
+tests\sitio_web.tftest.hcl... [37mtearing down[0m
+[0mtests\sitio_web.tftest.hcl... [32mpass[0m[0m
+
+[32mSuccess![0m[0m 4 passed, 0 failed.
+
+       _               _
+   ___| |__   ___  ___| | _______   __
+  / __| '_ \ / _ \/ __| |/ / _ \ \ / /
+ | (__| | | |  __/ (__|   < (_) \ V /
+  \___|_| |_|\___|\___|_|\_\___/ \_/
+
+By Prisma Cloud | version: 3.4.4 
+
+terraform scan results:
+
+Passed checks: 4, Failed checks: 0, Skipped checks: 0
+
+Check: CKV_AWS_53: "Ensure S3 bucket has block public ACLS enabled"
+	PASSED for resource: aws_s3_bucket_public_access_block.evidencias
+	File: \bucket.tf:5-11
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/bc-aws-s3-19
+[0mCheck: CKV_AWS_54: "Ensure S3 bucket has block public policy enabled"
+	PASSED for resource: aws_s3_bucket_public_access_block.evidencias
+	File: \bucket.tf:5-11
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/bc-aws-s3-20
+[0mCheck: CKV_AWS_55: "Ensure S3 bucket has ignore public ACLs enabled"
+	PASSED for resource: aws_s3_bucket_public_access_block.evidencias
+	File: \bucket.tf:5-11
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/bc-aws-s3-21
+[0mCheck: CKV_AWS_56: "Ensure S3 bucket has 'restrict_public_buckets' enabled"
+	PASSED for resource: aws_s3_bucket_public_access_block.evidencias
+	File: \bucket.tf:5-11
+	Guide: [1mhttps://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/bc-aws-s3-22
+[0mValidación completa: el cambio puede pasar a revisión
+Codigo de salida: 0

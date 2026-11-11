@@ -1,0 +1,537 @@
+﻿=== Prueba de bloqueo con dos terminales (workspace dev) ===
+
+> terraform workspace show
+dev
+Terminal 1: terraform apply -var=grupo=2 (cambio pendiente; queda esperando confirmacion y no se aplica)
+
+Terminal 2 (intento 1):
+data.docker_network.bridge: Reading...
+module.sitio["tienda"].docker_image.this: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+data.docker_network.bridge: Read complete after 0s [id=6d895917a68c9828fda496f5f5b10d60c4486227bc220ba406ad452fa7aae255]
+module.sitio["tienda"].docker_container.this: Refreshing state... [id=0662c18e3b09afda5a4c2678de537e232007674d53340822d541498c32823963]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+-/+ destroy and then create replacement
+
+Terraform will perform the following actions:
+
+  # module.sitio["tienda"].docker_container.this must be replaced
+-/+ resource "docker_container" "this" {
+      + bridge                                      = (known after apply)
+      ~ command                                     = [
+          - "nginx",
+          - "-g",
+          - "daemon off;",
+        ] -> (known after apply)
+      + container_logs                              = (known after apply)
+      - cpu_shares                                  = 0 -> null
+      - device_cgroup_rules                         = [] -> null
+      - dns                                         = [] -> null
+      - dns_opts                                    = [] -> null
+      - dns_search                                  = [] -> null
+      ~ entrypoint                                  = [
+          - "/docker-entrypoint.sh",
+        ] -> (known after apply)
+      ~ env                                         = [] -> (known after apply)
+      + exit_code                                   = (known after apply)
+      - group_add                                   = [] -> null
+      ~ hostname                                    = "0662c18e3b09" -> (known after apply)
+      ~ id                                          = "0662c18e3b09afda5a4c2678de537e232007674d53340822d541498c32823963" -> (known after apply)
+      ~ init                                        = false -> (known after apply)
+      ~ ipc_mode                                    = "private" -> (known after apply)
+      ~ log_driver                                  = "local" -> (known after apply)
+      - log_opts                                    = {} -> null
+      - max_retry_count                             = 0 -> null
+      - memory                                      = 0 -> null
+      - memory_swap                                 = 0 -> null
+      ~ name                                        = "tienda-g2-dev" -> "tienda-g1-dev" # forces replacement
+      ~ network_data                                = [
+          - {
+              - gateway                   = "172.17.0.1"
+              - global_ipv6_prefix_length = 0
+              - ip_address                = "172.17.0.2"
+              - ip_prefix_length          = 16
+              - mac_address               = "ba:50:34:e1:9e:4f"
+              - network_name              = "bridge"
+                # (2 unchanged attributes hidden)
+            },
+        ] -> (known after apply)
+      ~ platform                                    = "linux" -> (known after apply)
+      - privileged                                  = false -> null
+      - publish_all_ports                           = false -> null
+      ~ runtime                                     = "runc" -> (known after apply)
+      ~ security_opts                               = [] -> (known after apply)
+      ~ shm_size                                    = 64 -> (known after apply)
+      ~ stop_signal                                 = "SIGQUIT" -> (known after apply)
+      ~ stop_timeout                                = 0 -> (known after apply)
+      - storage_opts                                = {} -> null
+      - sysctls                                     = {} -> null
+      - tmpfs                                       = {} -> null
+      - working_dir                                 = "/" -> null
+        # (20 unchanged attributes hidden)
+
+      ~ healthcheck (known after apply)
+
+      ~ labels (known after apply)
+
+      - upload { # forces replacement
+          - content        = <<-EOT
+                <h1>Tienda - DEV - grupo 2</h1>
+                <p>Sitio tienda-g2-dev, desplegado con Terraform</p>
+            EOT -> null
+          - executable     = false -> null
+          - file           = "/usr/share/nginx/html/index.html" -> null
+            # (6 unchanged attributes hidden)
+        }
+      + upload { # forces replacement
+          + content        = <<-EOT
+                <h1>Tienda - DEV - grupo 1</h1>
+                <p>Sitio tienda-g1-dev, desplegado con Terraform</p>
+            EOT
+          + executable     = false
+          + file           = "/usr/share/nginx/html/index.html"
+            # (6 unchanged attributes hidden)
+        }
+
+        # (1 unchanged block hidden)
+    }
+
+Plan: 1 to add, 0 to change, 1 to destroy.
+
+Changes to Outputs:
+  ~ urls       = {
+      + tienda-g1-dev = "http://localhost:8101"
+      - tienda-g2-dev = "http://localhost:8101"
+    }
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.
+
+Terminal 2 (intento 2):
+data.docker_network.bridge: Reading...
+module.sitio["tienda"].docker_image.this: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+data.docker_network.bridge: Read complete after 0s [id=6d895917a68c9828fda496f5f5b10d60c4486227bc220ba406ad452fa7aae255]
+module.sitio["tienda"].docker_container.this: Refreshing state... [id=0662c18e3b09afda5a4c2678de537e232007674d53340822d541498c32823963]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+-/+ destroy and then create replacement
+
+Terraform will perform the following actions:
+
+  # module.sitio["tienda"].docker_container.this must be replaced
+-/+ resource "docker_container" "this" {
+      + bridge                                      = (known after apply)
+      ~ command                                     = [
+          - "nginx",
+          - "-g",
+          - "daemon off;",
+        ] -> (known after apply)
+      + container_logs                              = (known after apply)
+      - cpu_shares                                  = 0 -> null
+      - device_cgroup_rules                         = [] -> null
+      - dns                                         = [] -> null
+      - dns_opts                                    = [] -> null
+      - dns_search                                  = [] -> null
+      ~ entrypoint                                  = [
+          - "/docker-entrypoint.sh",
+        ] -> (known after apply)
+      ~ env                                         = [] -> (known after apply)
+      + exit_code                                   = (known after apply)
+      - group_add                                   = [] -> null
+      ~ hostname                                    = "0662c18e3b09" -> (known after apply)
+      ~ id                                          = "0662c18e3b09afda5a4c2678de537e232007674d53340822d541498c32823963" -> (known after apply)
+      ~ init                                        = false -> (known after apply)
+      ~ ipc_mode                                    = "private" -> (known after apply)
+      ~ log_driver                                  = "local" -> (known after apply)
+      - log_opts                                    = {} -> null
+      - max_retry_count                             = 0 -> null
+      - memory                                      = 0 -> null
+      - memory_swap                                 = 0 -> null
+      ~ name                                        = "tienda-g2-dev" -> "tienda-g1-dev" # forces replacement
+      ~ network_data                                = [
+          - {
+              - gateway                   = "172.17.0.1"
+              - global_ipv6_prefix_length = 0
+              - ip_address                = "172.17.0.2"
+              - ip_prefix_length          = 16
+              - mac_address               = "ba:50:34:e1:9e:4f"
+              - network_name              = "bridge"
+                # (2 unchanged attributes hidden)
+            },
+        ] -> (known after apply)
+      ~ platform                                    = "linux" -> (known after apply)
+      - privileged                                  = false -> null
+      - publish_all_ports                           = false -> null
+      ~ runtime                                     = "runc" -> (known after apply)
+      ~ security_opts                               = [] -> (known after apply)
+      ~ shm_size                                    = 64 -> (known after apply)
+      ~ stop_signal                                 = "SIGQUIT" -> (known after apply)
+      ~ stop_timeout                                = 0 -> (known after apply)
+      - storage_opts                                = {} -> null
+      - sysctls                                     = {} -> null
+      - tmpfs                                       = {} -> null
+      - working_dir                                 = "/" -> null
+        # (20 unchanged attributes hidden)
+
+      ~ healthcheck (known after apply)
+
+      ~ labels (known after apply)
+
+      - upload { # forces replacement
+          - content        = <<-EOT
+                <h1>Tienda - DEV - grupo 2</h1>
+                <p>Sitio tienda-g2-dev, desplegado con Terraform</p>
+            EOT -> null
+          - executable     = false -> null
+          - file           = "/usr/share/nginx/html/index.html" -> null
+            # (6 unchanged attributes hidden)
+        }
+      + upload { # forces replacement
+          + content        = <<-EOT
+                <h1>Tienda - DEV - grupo 1</h1>
+                <p>Sitio tienda-g1-dev, desplegado con Terraform</p>
+            EOT
+          + executable     = false
+          + file           = "/usr/share/nginx/html/index.html"
+            # (6 unchanged attributes hidden)
+        }
+
+        # (1 unchanged block hidden)
+    }
+
+Plan: 1 to add, 0 to change, 1 to destroy.
+
+Changes to Outputs:
+  ~ urls       = {
+      + tienda-g1-dev = "http://localhost:8101"
+      - tienda-g2-dev = "http://localhost:8101"
+    }
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.
+
+Terminal 2 (intento 3):
+data.docker_network.bridge: Reading...
+module.sitio["tienda"].docker_image.this: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+data.docker_network.bridge: Read complete after 0s [id=6d895917a68c9828fda496f5f5b10d60c4486227bc220ba406ad452fa7aae255]
+module.sitio["tienda"].docker_container.this: Refreshing state... [id=0662c18e3b09afda5a4c2678de537e232007674d53340822d541498c32823963]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+-/+ destroy and then create replacement
+
+Terraform will perform the following actions:
+
+  # module.sitio["tienda"].docker_container.this must be replaced
+-/+ resource "docker_container" "this" {
+      + bridge                                      = (known after apply)
+      ~ command                                     = [
+          - "nginx",
+          - "-g",
+          - "daemon off;",
+        ] -> (known after apply)
+      + container_logs                              = (known after apply)
+      - cpu_shares                                  = 0 -> null
+      - device_cgroup_rules                         = [] -> null
+      - dns                                         = [] -> null
+      - dns_opts                                    = [] -> null
+      - dns_search                                  = [] -> null
+      ~ entrypoint                                  = [
+          - "/docker-entrypoint.sh",
+        ] -> (known after apply)
+      ~ env                                         = [] -> (known after apply)
+      + exit_code                                   = (known after apply)
+      - group_add                                   = [] -> null
+      ~ hostname                                    = "0662c18e3b09" -> (known after apply)
+      ~ id                                          = "0662c18e3b09afda5a4c2678de537e232007674d53340822d541498c32823963" -> (known after apply)
+      ~ init                                        = false -> (known after apply)
+      ~ ipc_mode                                    = "private" -> (known after apply)
+      ~ log_driver                                  = "local" -> (known after apply)
+      - log_opts                                    = {} -> null
+      - max_retry_count                             = 0 -> null
+      - memory                                      = 0 -> null
+      - memory_swap                                 = 0 -> null
+      ~ name                                        = "tienda-g2-dev" -> "tienda-g1-dev" # forces replacement
+      ~ network_data                                = [
+          - {
+              - gateway                   = "172.17.0.1"
+              - global_ipv6_prefix_length = 0
+              - ip_address                = "172.17.0.2"
+              - ip_prefix_length          = 16
+              - mac_address               = "ba:50:34:e1:9e:4f"
+              - network_name              = "bridge"
+                # (2 unchanged attributes hidden)
+            },
+        ] -> (known after apply)
+      ~ platform                                    = "linux" -> (known after apply)
+      - privileged                                  = false -> null
+      - publish_all_ports                           = false -> null
+      ~ runtime                                     = "runc" -> (known after apply)
+      ~ security_opts                               = [] -> (known after apply)
+      ~ shm_size                                    = 64 -> (known after apply)
+      ~ stop_signal                                 = "SIGQUIT" -> (known after apply)
+      ~ stop_timeout                                = 0 -> (known after apply)
+      - storage_opts                                = {} -> null
+      - sysctls                                     = {} -> null
+      - tmpfs                                       = {} -> null
+      - working_dir                                 = "/" -> null
+        # (20 unchanged attributes hidden)
+
+      ~ healthcheck (known after apply)
+
+      ~ labels (known after apply)
+
+      - upload { # forces replacement
+          - content        = <<-EOT
+                <h1>Tienda - DEV - grupo 2</h1>
+                <p>Sitio tienda-g2-dev, desplegado con Terraform</p>
+            EOT -> null
+          - executable     = false -> null
+          - file           = "/usr/share/nginx/html/index.html" -> null
+            # (6 unchanged attributes hidden)
+        }
+      + upload { # forces replacement
+          + content        = <<-EOT
+                <h1>Tienda - DEV - grupo 1</h1>
+                <p>Sitio tienda-g1-dev, desplegado con Terraform</p>
+            EOT
+          + executable     = false
+          + file           = "/usr/share/nginx/html/index.html"
+            # (6 unchanged attributes hidden)
+        }
+
+        # (1 unchanged block hidden)
+    }
+
+Plan: 1 to add, 0 to change, 1 to destroy.
+
+Changes to Outputs:
+  ~ urls       = {
+      + tienda-g1-dev = "http://localhost:8101"
+      - tienda-g2-dev = "http://localhost:8101"
+    }
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.
+
+=== Incidente: en la terminal 1 se confirmo el apply (-var=grupo=2) en lugar de cancelarlo ===
+El contenedor de dev quedo como tienda-g2-dev; por eso la terminal 2 no encontro bloqueo. Se corrige volviendo al codigo.
+
+> terraform workspace show
+dev
+
+> terraform plan -no-color -out fase7-fix.tfplan
+System.Management.Automation.RemoteException
+Error: dial tcp 127.0.0.1:5433: connectex: No connection could be made because the target machine actively refused it.
+System.Management.Automation.RemoteException
+
+Revision del plan: aprobada
+
+> terraform apply -no-color fase7-fix.tfplan
+System.Management.Automation.RemoteException
+Error: Failed to load "fase7-fix.tfplan" as a plan file
+System.Management.Automation.RemoteException
+Error: GetFileAttributesEx fase7-fix.tfplan: The system cannot find the file
+specified.
+
+=== Prueba de bloqueo, nuevo intento ===
+Terminal 1: terraform console (mantiene el bloqueo del state mientras esta abierta; no puede aplicar cambios)
+
+=== Incidente: en la terminal 1 se confirmo el apply (-var=grupo=2) en lugar de cancelarlo ===
+El contenedor de dev quedo como tienda-g2-dev; por eso la terminal 2 no encontro bloqueo. Se corrige volviendo al codigo.
+
+> terraform workspace show
+dev
+
+> terraform plan -no-color -out fase7-fix.tfplan
+data.docker_network.bridge: Reading...
+module.sitio["tienda"].docker_image.this: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+data.docker_network.bridge: Read complete after 0s [id=62b8930b435d618b4a86969671a314a76e9f395234cad48a4ff25ad720ec58d3]
+module.sitio["tienda"].docker_container.this: Refreshing state... [id=0662c18e3b09afda5a4c2678de537e232007674d53340822d541498c32823963]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+-/+ destroy and then create replacement
+
+Terraform will perform the following actions:
+
+  # module.sitio["tienda"].docker_container.this must be replaced
+-/+ resource "docker_container" "this" {
+      + bridge                                      = (known after apply)
+      ~ command                                     = [
+          - "nginx",
+          - "-g",
+          - "daemon off;",
+        ] -> (known after apply)
+      + container_logs                              = (known after apply)
+      - cpu_shares                                  = 0 -> null
+      - device_cgroup_rules                         = [] -> null
+      - dns                                         = [] -> null
+      - dns_opts                                    = [] -> null
+      - dns_search                                  = [] -> null
+      ~ entrypoint                                  = [
+          - "/docker-entrypoint.sh",
+        ] -> (known after apply)
+      ~ env                                         = [] -> (known after apply)
+      ~ exit_code                                   = 255 -> (known after apply)
+      - group_add                                   = [] -> null
+      ~ hostname                                    = "0662c18e3b09" -> (known after apply)
+      ~ id                                          = "0662c18e3b09afda5a4c2678de537e232007674d53340822d541498c32823963" -> (known after apply)
+      ~ init                                        = false -> (known after apply)
+      ~ ipc_mode                                    = "private" -> (known after apply)
+      ~ log_driver                                  = "local" -> (known after apply)
+      - log_opts                                    = {} -> null
+      - max_retry_count                             = 0 -> null
+      - memory                                      = 0 -> null
+      - memory_swap                                 = 0 -> null
+      ~ must_run                                    = false -> true
+      ~ name                                        = "tienda-g2-dev" -> "tienda-g1-dev" # forces replacement
+      ~ network_data                                = [
+          - {
+              - global_ipv6_prefix_length = 0
+              - ip_prefix_length          = 0
+              - network_name              = "bridge"
+                # (5 unchanged attributes hidden)
+            },
+        ] -> (known after apply)
+      ~ platform                                    = "linux" -> (known after apply)
+      - privileged                                  = false -> null
+      - publish_all_ports                           = false -> null
+      ~ runtime                                     = "runc" -> (known after apply)
+      ~ security_opts                               = [] -> (known after apply)
+      ~ shm_size                                    = 64 -> (known after apply)
+      ~ stop_signal                                 = "SIGQUIT" -> (known after apply)
+      ~ stop_timeout                                = 0 -> (known after apply)
+      - storage_opts                                = {} -> null
+      - sysctls                                     = {} -> null
+      - tmpfs                                       = {} -> null
+      - working_dir                                 = "/" -> null
+        # (19 unchanged attributes hidden)
+
+      ~ healthcheck (known after apply)
+
+      ~ labels (known after apply)
+
+      + ports { # forces replacement
+          + external = 8101 # forces replacement
+          + internal = 80 # forces replacement
+          + ip       = "0.0.0.0" # forces replacement
+          + protocol = "tcp" # forces replacement
+        }
+
+      - upload { # forces replacement
+          - content        = <<-EOT
+                <h1>Tienda - DEV - grupo 2</h1>
+                <p>Sitio tienda-g2-dev, desplegado con Terraform</p>
+            EOT -> null
+          - executable     = false -> null
+          - file           = "/usr/share/nginx/html/index.html" -> null
+            # (6 unchanged attributes hidden)
+        }
+      + upload { # forces replacement
+          + content        = <<-EOT
+                <h1>Tienda - DEV - grupo 1</h1>
+                <p>Sitio tienda-g1-dev, desplegado con Terraform</p>
+            EOT
+          + executable     = false
+          + file           = "/usr/share/nginx/html/index.html"
+            # (6 unchanged attributes hidden)
+        }
+    }
+
+Plan: 1 to add, 0 to change, 1 to destroy.
+
+Changes to Outputs:
+  ~ urls       = {
+      + tienda-g1-dev = "http://localhost:8101"
+      - tienda-g2-dev = "http://localhost:8101"
+    }
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: fase7-fix.tfplan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "fase7-fix.tfplan"
+
+Revision del plan: aprobada
+
+> terraform apply -no-color fase7-fix.tfplan
+module.sitio["tienda"].docker_container.this: Destroying... [id=0662c18e3b09afda5a4c2678de537e232007674d53340822d541498c32823963]
+module.sitio["tienda"].docker_container.this: Destruction complete after 0s
+module.sitio["tienda"].docker_container.this: Creating...
+module.sitio["tienda"].docker_container.this: Creation complete after 1s [id=20b2bb88e905b560f49bca6ccdf0df52c9a702f81062227fb4070b0b96f900fe]
+
+Apply complete! Resources: 1 added, 0 changed, 1 destroyed.
+
+Outputs:
+
+red_driver = "bridge"
+urls = {
+  "tienda-g1-dev" = "http://localhost:8101"
+}
+
+=== Prueba de bloqueo, nuevo intento ===
+Terminal 1: terraform console (mantiene el bloqueo del state mientras esta abierta; no puede aplicar cambios)
+
+Terminal 2 (intento 1):
+data.docker_network.bridge: Reading...
+module.sitio["tienda"].docker_image.this: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+data.docker_network.bridge: Read complete after 0s [id=62b8930b435d618b4a86969671a314a76e9f395234cad48a4ff25ad720ec58d3]
+module.sitio["tienda"].docker_container.this: Refreshing state... [id=20b2bb88e905b560f49bca6ccdf0df52c9a702f81062227fb4070b0b96f900fe]
+
+No changes. Your infrastructure matches the configuration.
+
+Terraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.
+
+Nota: terraform console no adquiere el bloqueo del state (solo lo lee); por eso ese intento no sirvio. Se vuelve al apply que pide la guia.
+
+=== Prueba de bloqueo con apply (workspace dev) ===
+
+> terraform workspace show
+dev
+Terminal 1: terraform apply -replace=module.sitio["tienda"].docker_container.this (queda esperando confirmacion; si se aplicara solo recrearia el mismo contenedor)
+
+Terminal 2 (intento 1):
+System.Management.Automation.RemoteException
+Error: Error acquiring the state lock
+System.Management.Automation.RemoteException
+Error message: Workspace is already locked: dev
+Lock Info:
+  ID:        eeb661ba-af97-2863-f27c-362e0dd480ca
+  Path:      
+  Operation: OperationTypePlan
+  Who:       SEBASTIAN\sebas@Sebastian
+  Version:   1.17.0
+  Created:   2026-11-11 19:32:10.6703199 +0000 UTC
+  Info:      
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+Terraform acquires a state lock to protect the state from being written
+by multiple users at the same time. Please resolve the issue above and try
+again. For most commands, you can disable locking with the "-lock=false"
+flag, but this is not recommended.
+
+Terminal 1 (confirmado por el grupo): listo - respondio 'no' y el apply se cancelo.
+
+=== Verificacion: bloqueo liberado y dev igual al codigo ===
+
+> terraform plan -no-color -lock-timeout=0s
+data.docker_network.bridge: Reading...
+module.sitio["tienda"].docker_image.this: Refreshing state... [id=sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236nginx:1.28-alpine]
+data.docker_network.bridge: Read complete after 0s [id=62b8930b435d618b4a86969671a314a76e9f395234cad48a4ff25ad720ec58d3]
+module.sitio["tienda"].docker_container.this: Refreshing state... [id=20b2bb88e905b560f49bca6ccdf0df52c9a702f81062227fb4070b0b96f900fe]
+
+No changes. Your infrastructure matches the configuration.
+
+Terraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.

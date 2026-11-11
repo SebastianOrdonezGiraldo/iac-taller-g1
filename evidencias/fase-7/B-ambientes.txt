@@ -1195,3 +1195,4 @@ tienda-g1-dev       a8b39bd9cf0f         0.0.0.0:8101->80/tcp
 tf-state-g1         postgres:17-alpine   0.0.0.0:5433->5432/tcp, [::]:5433->5432/tcp
 
 === Verificacion: la contrasena no esta en el repositorio ===
+git grep <contrasena del backend>: sin coincidencias
